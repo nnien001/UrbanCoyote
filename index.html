@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Info windows</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 80%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+      // This example displays a marker at the center of Australia.
+      // When the user clicks the marker, an info window opens.
+      var infowindow = null;
+
+
+      function initMap() {
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: uluru,
+          mapTypeId: 'hybrid'
+        });
+
+        var sites = [
+          ["uluru2", -25.363, 131.044, 1, "some words"],
+          ["uluru3", -25.364, 131.044, 2, "some more words"]
+        ];
+
+        setMarkers(map, sites);
+        infowindow = new google.maps.InfoWindow({
+          content: "loading..."
+        });
+      }
+
+      function setMarkers(map, markers) {
+
+        for (var i = 0; i < markers.length; i++) {
+
+          var site = markers[i];
+          console.log(site);
+
+          var siteLatLng = new google.maps.LatLng(site[1], site[2]);
+          var marker = new google.maps.Marker({
+            position: siteLatLng,
+            map: map,
+            title: site[0],
+            zIndex: site[3], //this determines overlay of markers
+            html: site[4]
+          });
+
+          google.maps.event.addListener(marker, "click", function() {
+            
+            infowindow.setContent(this.html);
+            infowindow.open(map, this);
+          });
+
+        }
+      }
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5ocI26IiN-lFWnZWbQOelyFc-MgCWXOM&callback=initMap">
+    </script>
+  </body>
+</html>
